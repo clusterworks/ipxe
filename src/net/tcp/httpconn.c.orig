@@ -41,7 +41,6 @@ FILE_LICENCE ( GPL2_OR_LATER_OR_UBDL );
 #include <ipxe/open.h>
 #include <ipxe/pool.h>
 #include <ipxe/http.h>
-#include <ipxe/proxy.h>
 
 /** HTTP pooled connection expiry time */
 #define HTTP_CONN_EXPIRY ( 10 * TICKS_PER_SEC )
@@ -251,8 +250,8 @@ int http_connect ( struct interface *xfer, struct uri *uri ) {
 		return -EINVAL;
 
 	/* Identify port */
-	/*port = uri_port ( uri, scheme->port );*/
-        port = proxied_uri_port ( uri, scheme->port );
+	port = uri_port ( uri, scheme->port );
+
 	/* Look for a reusable connection in the pool */
 	list_for_each_entry ( conn, &http_connection_pool, pool.list ) {
 
@@ -298,8 +297,7 @@ int http_connect ( struct interface *xfer, struct uri *uri ) {
 		goto err_filter;
 	if ( ( rc = xfer_open_named_socket ( socket, SOCK_STREAM,
 					     ( struct sockaddr * ) &server,
-					     /* uri->host, NULL ) ) != 0 ) */
-	                                     proxied_uri_host ( uri ), NULL ) ) != 0 )
+					     uri->host, NULL ) ) != 0 )
 		goto err_open;
 
 	/* Attach to parent interface, mortalise self, and return */

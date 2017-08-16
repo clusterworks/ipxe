@@ -467,8 +467,6 @@ extern const struct setting
 mac_setting __setting ( SETTING_NETDEV, mac );
 extern const struct setting
 busid_setting __setting ( SETTING_NETDEV, busid );
-extern struct setting
-http_proxy_setting __setting ( SETTING_MISC, ip );
 extern const struct setting
 user_class_setting __setting ( SETTING_HOST_EXTRA, user-class );
 extern const struct setting

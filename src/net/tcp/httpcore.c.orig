@@ -56,7 +56,6 @@ FILE_LICENCE ( GPL2_OR_LATER_OR_UBDL );
 #include <ipxe/profile.h>
 #include <ipxe/vsprintf.h>
 #include <ipxe/http.h>
-#include <ipxe/proxy.h>
 
 /* Disambiguate the various error causes */
 #define EACCES_401 __einfo_error ( EINFO_EACCES_401 )
@@ -593,14 +592,8 @@ int http_open ( struct interface *xfer, struct http_method *method,
 
 	/* Calculate request URI length */
 	memset ( &request_uri, 0, sizeof ( request_uri ) );
-	if ( is_proxy_set ( ) ) {
-	  /*include all fields*/
-	  memcpy( &request_uri, uri, sizeof( request_uri ));
-	}
-	else {
-	  request_uri.path = ( uri->path ? uri->path : "/" );
-	  request_uri.query = uri->query;
-	}
+	request_uri.path = ( uri->path ? uri->path : "/" );
+	request_uri.query = uri->query;
 	request_uri_len =
 		( format_uri ( &request_uri, NULL, 0 ) + 1 /* NUL */);
 
